@@ -1,0 +1,177 @@
+{
+  "name": "Alerte appel IA refusé",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "cockpit-refus",
+        "options": {}
+      },
+      "id": "60d285ef-c9a8-4fda-9c85-2c25446089fb",
+      "name": "Webhook refus",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        128
+      ],
+      "webhookId": "cockpit-refus-0001"
+    },
+    {
+      "parameters": {
+        "operation": "append",
+        "documentId": {
+          "__rl": true,
+          "value": "1WBxPiWbLLmyM_MjI-Kc0sLd9QKzKY9d9wI3T05P2Reo",
+          "mode": "list",
+          "cachedResultName": "Journal cockpit IA",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WBxPiWbLLmyM_MjI-Kc0sLd9QKzKY9d9wI3T05P2Reo/edit?usp=drivesdk"
+        },
+        "sheetName": {
+          "__rl": true,
+          "value": "gid=0",
+          "mode": "list",
+          "cachedResultName": "Feuille 1",
+          "cachedResultUrl": "https://docs.google.com/spreadsheets/d/1WBxPiWbLLmyM_MjI-Kc0sLd9QKzKY9d9wI3T05P2Reo/edit#gid=0"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "time": "={{ $json.body.time }}",
+            "role": "={{ $json.body.role }}",
+            "project": "={{ $json.body.project }}",
+            "tool": "={{ $json.body.tool }}",
+            "reason": "={{ $json.body.reason }}"
+          },
+          "matchingColumns": [],
+          "schema": [
+            {
+              "id": "time",
+              "displayName": "time",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "role",
+              "displayName": "role",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "project",
+              "displayName": "project",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "tool",
+              "displayName": "tool",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "reason",
+              "displayName": "reason",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "id": "569470c4-57d3-47f8-9b07-4d73843a7a78",
+      "name": "Journal Google Sheets",
+      "type": "n8n-nodes-base.googleSheets",
+      "typeVersion": 4.5,
+      "position": [
+        288,
+        0
+      ],
+      "credentials": {
+        "googleSheetsOAuth2Api": {
+          "id": "m0GiRfqYLeoi6oHN",
+          "name": "Google Sheets account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "sendTo": "jacesharyn@gmail.com",
+        "subject": "=Appel IA refusé : {{ $json.body.role }} → {{ $json.body.tool }}",
+        "emailType": "text",
+        "message": "=Un appel d'outil IA a été refusé par la passerelle.\n\nRôle : {{ $json.body.role }}\nProjet : {{ $json.body.project }}\nOutil : {{ $json.body.tool }}\nRaison : {{ $json.body.reason }}\nHeure : {{ $json.body.time }}",
+        "options": {}
+      },
+      "id": "97222348-1c79-4bf7-9bc2-98e2a70f33d2",
+      "name": "Alerte Gmail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        288,
+        240
+      ],
+      "webhookId": "71052be6-974e-4902-bd9e-bd7d80dc9e5b",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "nNUWpSUR8mYPqgoR",
+          "name": "Gmail account 3"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "Webhook refus": {
+      "main": [
+        [
+          {
+            "node": "Journal Google Sheets",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Alerte Gmail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": true,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": true
+  },
+  "versionId": "cfb7ad77-4afc-48d1-92d8-b23716f5fbb6",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "c2327634a282148d2c147e459121e02de1c8fe9d8b83df848de2ac287f29cf4e"
+  },
+  "nodeGroups": [],
+  "id": "Uc1nwxUqRS3BnFDz",
+  "tags": []
+}
